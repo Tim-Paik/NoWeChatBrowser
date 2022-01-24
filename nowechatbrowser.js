@@ -1,0 +1,1 @@
+(function(){if(window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i)=='micromessenger'){window.location.replace("https://timpaik.gitee.io/pages/nowechatbrowser?url="+encodeURIComponent(window.location.href)+"&title="+document.title)}})();

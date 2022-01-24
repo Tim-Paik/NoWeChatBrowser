@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本页面不支持微信内置浏览器</title>
+    <link rel="stylesheet" href="https://res.wx.qq.com/t/wx_fed/weui-source/res/2.5.4/weui.min.css">
+    <script src="zepto.min.js"></script>
+    <script src="clipboard.min.js"></script>
+    <style>
+        html,
+        body,
+        .weui-msg {
+            width: 100%;
+            height: 100%;
+        }
+
+        #url {
+            font-size: 16px;
+            text-align: center;
+            color: rgba(0, 0, 0, .9);
+            color: var(--weui-FG-0);
+        }
+
+        .weui-msg__custom-area {
+            padding: 5px 20px;
+            border-radius: 8px;
+            background-color: var(--weui-BG-0);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="weui-msg">
+        <div class="weui-msg__text-area">
+            <p class="weui-msg__desc">本页面不支持微信内置浏览器</p>
+            <p class="weui-msg__desc-primary">如有需要，请复制以下连接到系统浏览器打开</p>
+            <div class="weui-msg__custom-area">
+                <p id="url"></p>
+            </div>
+        </div>
+        <div class="weui-msg__opr-area">
+            <p class="weui-btn-area">
+                <a id="copy" role="button" class="weui-btn weui-btn_primary" data-clipboard-text="">复制连接</a>
+            <div role="alert" id="toast" style="opacity: 0; display: none;">
+                <div class="weui-mask_transparent"></div>
+                <div class="weui-toast">
+                    <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+                    <p class="weui-toast__content">复制成功</p>
+                </div>
+            </div>
+            <div role="alert" id="warnToast" style="opacity: 0; display: none;">
+                <div class="weui-mask_transparent"></div>
+                <div class="weui-toast">
+                    <i class="weui-icon-warn weui-icon_toast"></i>
+                    <p class="weui-toast__content">复制失败</p>
+                </div>
+            </div>
+            <script>
+                $(function () {
+                    function isWeChat() {
+                        return window.navigator.userAgent
+                            .toLowerCase()
+                            .match(/MicroMessenger/i) == 'micromessenger';
+                    }
+                    function getQueryString(name) {
+                        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                        let r = window.location.search.substr(1).match(reg);
+                        if (r != null) {
+                            return decodeURIComponent(r[2]);
+                        };
+                        return null;
+                    }
+                    document.title = getQueryString("title") || document.title;
+                    var url = decodeURIComponent(getQueryString("url") || "\r\n");
+                    if (!isWeChat() && url != "\r\n") {
+                        window.location.replace(url);
+                    }
+                    $('#url')[0].innerText = url;
+                    $('#copy').attr("data-clipboard-text", url);
+                    var clipboard = new ClipboardJS('#copy');
+                    clipboard.on('success', function (e) {
+                        var toast = $('#toast');
+                        toast.fadeIn(100);
+                        setTimeout(function () {
+                            toast.fadeOut(100);
+                        }, 2000);
+                    });
+                    clipboard.on('error', function (e) {
+                        var warnToast = $('#warnToast');
+                        warnToast.fadeIn(100);
+                        setTimeout(function () {
+                            warnToast.fadeOut(100);
+                        }, 2000);
+                    });
+                });
+            </script>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
